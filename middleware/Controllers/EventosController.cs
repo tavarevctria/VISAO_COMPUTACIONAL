@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using middleware.Data;
 using middleware.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace middleware.Controllers
 {
@@ -19,9 +19,10 @@ namespace middleware.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Evento evento)
         {
-            if (evento == null) return BadRequest();
+            if (evento == null)
+                return BadRequest();
 
-            evento.DataHora = DateTime.Now; 
+            evento.DataHora = DateTime.Now;
             _context.Eventos.Add(evento);
             await _context.SaveChangesAsync();
 
@@ -29,15 +30,11 @@ namespace middleware.Controllers
         }
 
         [HttpGet]
-    public async Task<IActionResult> Get()
-{
-        var eventos = await _context.Eventos
-        .OrderByDescending(e => e.DataHora)
-        .ToListAsync();
-        
-        return Ok(eventos);
-}
-    }
+        public async Task<IActionResult> Get()
+        {
+            var eventos = await _context.Eventos.OrderByDescending(e => e.DataHora).ToListAsync();
 
-    
+            return Ok(eventos);
+        }
+    }
 }
